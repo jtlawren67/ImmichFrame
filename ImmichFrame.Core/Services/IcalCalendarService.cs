@@ -46,12 +46,13 @@ public class IcalCalendarService : ICalendarService
             }).Where(x => x != null).Select(x => x!.Value).ToList();
 
             var icals = await GetCalendars(cals);
+			var lookAheadDays = _serverSettings.WebcalendarLookaheadDays;
 
             foreach (var ical in icals)
             {
                 var calendar = Calendar.Load(ical);
 
-                appointments.AddRange(calendar.GetOccurrences(DateTime.Today, DateTime.Today.AddDays(1)).Select(x => x.ToAppointment()));
+                appointments.AddRange(calendar.GetOccurrences(DateTime.Today, DateTime.Today.AddDays(lookAheadDays)).Select(x => x.ToAppointment()));
             }
 
             return appointments;
