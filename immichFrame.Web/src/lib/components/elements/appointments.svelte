@@ -63,9 +63,6 @@
 			{#each appointments as appointment}
 				<div class="bg-opacity-90 mb-2 text-left rounded-md p-3">
 					<p class="text-s">
-						<b><u>{format(new Date(appointment.startTime ?? ''), 'EEEE MMMM dd, yyyy')}</u></b>
-					</p>
-					<p class="text-xs">
 						{format(appointment.startTime ?? '', 'hh:mm b')} - {format(appointment.endTime ?? '', 'hh:mm b')}
 					</p>
 					{appointment.summary}
