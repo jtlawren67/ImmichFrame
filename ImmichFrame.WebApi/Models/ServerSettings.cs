@@ -35,6 +35,7 @@ public class GeneralSettings : IGeneralSettings, IConfigSettable
     public double TransitionDuration { get; set; } = 1;
     public bool ShowClock { get; set; } = true;
     public string? ClockFormat { get; set; } = "hh:mm";
+	public string? ClockDateFormat { get; set; } = "MM/dd/yyyy";
     public bool ShowProgressBar { get; set; } = true;
     public bool ShowPhotoDate { get; set; } = true;
     public bool ShowImageDesc { get; set; } = true;
@@ -52,6 +53,7 @@ public class GeneralSettings : IGeneralSettings, IConfigSettable
     public string Layout { get; set; } = "splitview";
     public int RenewImagesDuration { get; set; } = 30;
     public List<string> Webcalendars { get; set; } = new();
+	public int WebcalendarLookaheadDays { get; set; } = 1;
     public int RefreshAlbumPeopleInterval { get; set; } = 12;
     public string? WeatherApiKey { get; set; } = string.Empty;
     public string? UnitSystem { get; set; } = "imperial";

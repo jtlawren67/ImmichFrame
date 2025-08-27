@@ -22,6 +22,7 @@ public class ServerSettingsV1 : IConfigSettable
     public List<Guid> People { get; set; } = new List<Guid>();
     public int? Rating { get; set; }
     public List<string> Webcalendars { get; set; } = new List<string>();
+	public int WebcalendarLookaheadDays { get; set; } = 1;
     public int RefreshAlbumPeopleInterval { get; set; } = 12;
     public string? WeatherApiKey { get; set; } = string.Empty;
     public string? UnitSystem { get; set; } = "imperial";
@@ -33,6 +34,7 @@ public class ServerSettingsV1 : IConfigSettable
     public double TransitionDuration { get; set; } = 1;
     public bool ShowClock { get; set; } = true;
     public string? ClockFormat { get; set; } = "hh:mm";
+	public string? ClockDateFormat { get; set; } = "MM/dd/yyyy";
     public bool ShowProgressBar { get; set; } = true;
     public bool ShowPhotoDate { get; set; } = true;
     public string? PhotoDateFormat { get; set; } = "MM/dd/yyyy";
@@ -81,6 +83,7 @@ public class ServerSettingsV1Adapter(ServerSettingsV1 _delegate) : IServerSettin
     class GeneralSettingsV1Adapter(ServerSettingsV1 _delegate) : IGeneralSettings
     {
         public List<string> Webcalendars => _delegate.Webcalendars;
+		public int WebcalendarLookaheadDays => _delegate.WebcalendarLookaheadDays;
         public int RefreshAlbumPeopleInterval => _delegate.RefreshAlbumPeopleInterval;
         public string? WeatherApiKey => _delegate.WeatherApiKey;
         public string? WeatherLatLong => _delegate.WeatherLatLong;
@@ -93,6 +96,7 @@ public class ServerSettingsV1Adapter(ServerSettingsV1 _delegate) : IServerSettin
         public int RenewImagesDuration => _delegate.RenewImagesDuration;
         public bool ShowClock => _delegate.ShowClock;
         public string? ClockFormat => _delegate.ClockFormat;
+		public string? ClockDateFormat => _delegate.ClockDateFormat;
         public bool ShowProgressBar => _delegate.ShowProgressBar;
         public bool ShowPhotoDate => _delegate.ShowPhotoDate;
         public string? PhotoDateFormat => _delegate.PhotoDateFormat;
