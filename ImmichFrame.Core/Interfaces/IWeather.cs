@@ -8,5 +8,6 @@
         public string TemperatureUnit { get; set; }
         public string Description { get; set; }
         public string IconId { get; set; }
+        public string Forecast { get; set; }
     }
 }
