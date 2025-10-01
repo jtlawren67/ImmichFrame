@@ -5,6 +5,7 @@
 	import * as locale from 'date-fns/locale';
 	import { configStore } from '$lib/stores/config.store';
 	import { clientIdentifierStore } from '$lib/stores/persist.store';
+	import * as icons from '$lib/assets/icons';
 
 	api.init();
 
@@ -76,7 +77,8 @@
 				class="text-xl sm:text-xl md:text-2xl lg:text-3xl font-semibold text-shadow-sm weather-info"
 			>
 				{#if $configStore.weatherIconUrl }
-				<img src="{ $configStore.weatherIconUrl.replace('{IconId}', encodeURIComponent(weather.iconId)) }" class="icon-weather" alt="{weather.description}">
+				<!-- <img src="{ $configStore.weatherIconUrl.replace('{IconId}', encodeURIComponent(weather.iconId)) }" class="icon-weather" alt="{weather.description}"> -->
+				<img src="{icons[weather.iconId.replace('-','')]}" class="icon-weather" alt="{weather.description}">
 				{/if}
 				<div class="weather-location">{weather.location},</div>
 				<div class="weather-temperature">{weather.temperature?.toFixed(1)}</div>
