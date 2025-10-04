@@ -36,7 +36,6 @@ namespace ImmichFrame.Core.Services
             {
                 var units = _settings.UnitSystem?.ToLower() == "metric" ? "si" : "us";
                 var url = $"https://api.pirateweather.net/forecast/{_settings.WeatherApiKey}/{latitude},{longitude}?units={units}";
-                //var url = $"https://api.pirateweather.net/forecast/3m4sfbzc8JNGEkVztniDLalwg2FoMqC3/40.7303906,-74.0348637?units=us";
 
                 var response = await _httpClient.GetAsync(url);
                 response.EnsureSuccessStatusCode();
