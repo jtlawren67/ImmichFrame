@@ -43,25 +43,20 @@ namespace ImmichFrame.Core.Services
                 var json = await response.Content.ReadAsStringAsync();
                 var data = JsonSerializer.Deserialize<PirateWeatherResponse>(json);
 
-                var forecast = "";
-                if (data?.Daily?.Data?.Count > 0)
-                {
-                    var tomorrow = data.Daily.Data[0];
-                    forecast = $"Tomorrow: {tomorrow.Summary} High: {tomorrow.TemperatureHigh:F0}{(units == "si" ? "°C" : "°F")} Low: {tomorrow.TemperatureLow:F0}{(units == "si" ? "°C" : "°F")}";
-                }
+                // Create Summmary Field
+                var summary = data?.Minutely?.Summary + " " + data?.Hourly?.Summary + " " + data?.Daily?.Summary;
 
                 return new Weather
                 {
-                    //Location = data?.timezone ?? "",
-                    //Unit = units == "si" ? "°C" : "°F",
-                    //TemperatureUnit = $"{data?.Currently?.temperature ?? 0}{(units == "si" ? "°C" : "°F")}",
-                    //Description = data?.Currently?.summary ?? "",
-                    //Forecast = forecast,
                     IconId = data?.Currently?.Icon ?? "",
-                    Location = "Pirate Weather",
                     Temperature = data?.Currently?.Temperature ?? 0,
-                    Unit = units == "si" ? "°C" : "°F", 
-                    Description = data?.Currently?.Summary ?? "",
+                    TempHigh = data?.Daily?.Data?[0].TemperatureHigh ?? 0,
+                    TempLow = data?.Daily?.Data?[0].TemperatureLow ?? 0,
+                    Precip = data?.Currently?.PrecipProbability ?? 0,
+                    Unit = units == "si" ? "°C" : "°F",
+                    Description = summary ?? "",
+                    HourlyForecast = data?.Hourly?.Data?.Skip(1).Where((_, index) => index % 2 == 0).Take(6).ToArray() ?? [],
+                    DailyForecast = data?.Daily?.Data?.Skip(1).Take(3).ToArray() ?? [],
                 };
             }
             catch

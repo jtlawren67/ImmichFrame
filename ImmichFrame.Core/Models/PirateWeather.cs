@@ -21,6 +21,10 @@ namespace ImmichFrame.Core.Models
 
         [JsonPropertyName("hourly")]
         public Hourly? Hourly { get; set; }
+
+        [JsonPropertyName("minutely")]
+        public Minutely? Minutely { get; set; }
+
     }
 
     public class Currently
@@ -36,6 +40,9 @@ namespace ImmichFrame.Core.Models
 
         [JsonPropertyName("temperature")]
         public double Temperature { get; set; }
+
+        [JsonPropertyName("precipProbability")]
+        public double PrecipProbability { get; set; }
     }
 
     public class Daily
@@ -54,9 +61,6 @@ namespace ImmichFrame.Core.Models
     {
         [JsonPropertyName("time")]
         public long Time { get; set; }
-
-        [JsonPropertyName("summary")]
-        public string? Summary { get; set; }
 
         [JsonPropertyName("icon")]
         public string? Icon { get; set; }
@@ -88,9 +92,6 @@ namespace ImmichFrame.Core.Models
         [JsonPropertyName("time")]
         public long Time { get; set; }
 
-        [JsonPropertyName("summary")]
-        public string? Summary { get; set; }
-
         [JsonPropertyName("icon")]
         public string? Icon { get; set; }
 
@@ -99,5 +100,12 @@ namespace ImmichFrame.Core.Models
 
         [JsonPropertyName("precipProbability")]
         public double PrecipProbability { get; set; }
+    }
+
+    public class Minutely
+    {
+        [JsonPropertyName("summary")]
+        public string? Summary { get; set; }
+
     }
 }

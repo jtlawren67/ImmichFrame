@@ -5,7 +5,8 @@
 	import * as locale from 'date-fns/locale';
 	import { configStore } from '$lib/stores/config.store';
 	import { clientIdentifierStore } from '$lib/stores/persist.store';
-	import * as icons from '$lib/assets/icons';
+	import * as iconsImport from '$lib/assets/icons';
+	const icons: Record<string, string> = iconsImport as Record<string, string>;
 
     api.init();
 
@@ -54,18 +55,41 @@
             id="weatherinfo"
             class="text-xl sm:text-xl md:text-2xl lg:text-3xl font-semibold text-shadow-sm weather-info"
         >
-            {#if $configStore.weatherIconUrl }
-            <!-- <img src="{ $configStore.weatherIconUrl.replace('{IconId}', encodeURIComponent(weather.iconId)) }" class="icon-weather" alt="{weather.description}"> -->
-            <img src="{icons[weather.iconId.replace('-','')]}" class="icon-weather" alt="{weather.description}">
-            {/if}
-            <div class="weather-location">{weather.location},</div>
+			{#if weather.iconId}
+				<img src="{icons[weather.iconId.replace('-','')]}" class="icon-weather" alt="{weather.description}">
+			{/if}
+         
             <div class="weather-temperature">{weather.temperature?.toFixed(1)}</div>
             <div class="weather-unit">{weather.unit}</div>
         </div>
+        <div id = "weatherHighLow" class="text-sm sm:text-sm md:text-md lg:text-xl text-shadow-sm">
+            <div class="weather-hilow">H {weather.tempHigh?.toFixed(0)}° / L {weather.tempLow?.toFixed(0)}°</div>
+            <div class="weather-precip">Precip: {weather.precip}%</div>
+        </div>
+
         {#if $configStore.showWeatherDescription}
             <p id="weatherdesc" class="text-sm sm:text-sm md:text-md lg:text-xl text-shadow-sm">
                 {weather.description}
             </p>
         {/if}
+
+        {#each weather.hourlyForecast ?? [] as forecast, index}
+			<div class="forecast-item">
+				<p>{forecast.time != null ? new Date(Number(forecast.time) * 1000).toLocaleTimeString(undefined, { hour: 'numeric', hour12: true }) : ''}
+				{forecast.temperature !== undefined ? Math.round(forecast.temperature) : '--'}°
+				Precip: {forecast.precipProbability}%</p>
+			</div>
+		{/each}
+
+		{#each weather.dailyForecast ?? [] as forecast, index}
+			<div class="forecast-item">
+				<p>{forecast.time != null ? new Date(Number(forecast.time) * 1000).toLocaleDateString(undefined, { weekday: 'short' }) : ''}
+					H {forecast.temperatureHigh !== undefined ? Math.round(forecast.temperatureHigh) : '--'}°
+					/ L {forecast.temperatureLow !== undefined ? Math.round(forecast.temperatureLow) : '--'}
+				Precip: {forecast.precipProbability}%</p>
+			</div>
+		{/each}
+
+
 	{/if}
 </div>
