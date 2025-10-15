@@ -56,7 +56,7 @@
             class="text-xl sm:text-xl md:text-2xl lg:text-3xl font-semibold text-shadow-sm weather-info current-conditions-wrapper"
         >
 			{#if weather.iconId}
-				<img src="{icons[weather.iconId.replace('-','')]}" class="current icon" alt="{weather.description}">
+				<img src="{icons[weather.iconId.replaceAll('-','')]}" class="current icon" alt="{weather.iconId.replaceAll('-','')}">
 			{/if}
          
             <div class="current temperature">{weather.temperature?.toFixed(1)}{weather.unit}</div>
@@ -87,7 +87,7 @@
 			{#each weather.hourlyForecast ?? [] as forecast, index}
 			<div class="forecast-item hourly">
 				<span class="time">{forecast.time != null ? new Date(Number(forecast.time) * 1000).toLocaleTimeString(undefined, { hour: 'numeric', hour12: true }) : ''}</span>
-				<span class="forecast-icon-container"><img src="{icons[(forecast.icon ?? '').replace('-','')]}" class="forecast-icon" alt="an icon"></span>
+				<span class="forecast-icon-container"><img src="{icons[(forecast.icon ?? '').replaceAll('-','')]}" class="forecast-icon" alt="{(forecast.icon ?? '').replaceAll('-','')}"></span>
 				<span class="temperature small">{forecast.temperature !== undefined ? Math.round(forecast.temperature) : '--'}°</span>
 
 				 <span class="precipitation-container">
