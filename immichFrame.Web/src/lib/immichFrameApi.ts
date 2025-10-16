@@ -229,6 +229,19 @@ export type ClientSettingsDto = {
     layout?: string | null;
     language?: string | null;
 };
+export type DayForecast = {
+    time?: string | null;
+    temperatureHigh?: number;
+    temperatureLow?: number;
+    precipProbability?: string | null;
+    icon?: string | null
+};
+export type HourForecast = {
+    time?: string | null;
+    temperature?: number;
+    precipProbability?: string | null;
+    icon?: string | null
+};
 export type IWeather = {
     location?: string | null;
     temperature?: number;
@@ -236,6 +249,11 @@ export type IWeather = {
     temperatureUnit?: string | null;
     description?: string | null;
     iconId?: string | null;
+    tempHigh?: number;
+    tempLow?: number;
+    precip?: number;
+    dailyForecast?: DayForecast[] | [];
+    hourlyForecast?: HourForecast[] | [];
 };
 export function getAssets({ clientIdentifier }: {
     clientIdentifier?: string;
