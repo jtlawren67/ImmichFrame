@@ -13,6 +13,7 @@
 	import ErrorElement from '../elements/error-element.svelte';
 	import Clock from '../elements/clock.svelte';
 	import Appointments from '../elements/appointments.svelte';
+	import Weather from '../elements/weather.svelte';
 	import LoadingElement from '../elements/LoadingElement.svelte';
 	import { page } from '$app/state';
 
@@ -370,6 +371,8 @@
 		{/if}
 
 		<Appointments />
+
+		<Weather />
 
 		<OverlayControls
 			next={async () => {
