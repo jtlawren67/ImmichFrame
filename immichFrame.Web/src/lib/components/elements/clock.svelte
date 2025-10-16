@@ -52,5 +52,4 @@
 	>
 		{timePortion()}
 	</p>
-
 </div>
