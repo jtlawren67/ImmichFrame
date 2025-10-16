@@ -1,9 +1,6 @@
 <script lang="ts">
 	import * as api from '$lib/index';
-	import ProgressBar, {
-		ProgressBarLocation,
-		ProgressBarStatus
-	} from '$lib/components/elements/progress-bar.svelte';
+	import ProgressBar from '$lib/components/elements/progress-bar.svelte';
 	import { slideshowStore } from '$lib/stores/slideshow.store';
 	import { clientIdentifierStore, authSecretStore } from '$lib/stores/persist.store';
 	import { onDestroy, onMount, setContext } from 'svelte';
@@ -16,6 +13,7 @@
 	import Weather from '../elements/weather.svelte';
 	import LoadingElement from '../elements/LoadingElement.svelte';
 	import { page } from '$app/state';
+	import { ProgressBarLocation, ProgressBarStatus } from '../elements/progress-bar.types';
 
 	interface ImagesState {
 		images: [string, api.AssetResponseDto, api.AlbumResponseDto[]][];
@@ -60,7 +58,7 @@
 	let unsubscribeStop: () => void;
 
 	let cursorVisible = $state(true);
-	let timeoutId: NodeJS.Timeout;
+	let timeoutId: number;
 
 	const clientIdentifier = page.url.searchParams.get('client');
 	const authsecret = page.url.searchParams.get('authsecret');
