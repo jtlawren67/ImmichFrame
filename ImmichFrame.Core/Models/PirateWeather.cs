@@ -43,12 +43,8 @@ namespace ImmichFrame.Core.Models
 
         [JsonPropertyName("precipProbability")]
         public double PrecipProbability { get; set; }
-<<<<<<< HEAD
-
         [JsonPropertyName("apparentTemperature")]
         public double ApparentTemperature { get; set; }
-=======
->>>>>>> 210bc0b (Adding Pirate Weather Forecasts to Screen (#3))
     }
 
     public class Daily
@@ -70,20 +66,11 @@ namespace ImmichFrame.Core.Models
 
         [JsonPropertyName("icon")]
         public string? Icon { get; set; }
-
-<<<<<<< HEAD
         [JsonPropertyName("temperatureMax")]
         public double TemperatureMax { get; set; }
 
         [JsonPropertyName("temperatureMin")]
         public double TemperatureMin { get; set; }
-=======
-        [JsonPropertyName("temperatureHigh")]
-        public double TemperatureHigh { get; set; }
-
-        [JsonPropertyName("temperatureLow")]
-        public double TemperatureLow { get; set; }
->>>>>>> 210bc0b (Adding Pirate Weather Forecasts to Screen (#3))
 
         [JsonPropertyName("precipProbability")]
         public double PrecipProbability { get; set; }
