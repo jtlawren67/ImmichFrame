@@ -231,8 +231,8 @@ export type ClientSettingsDto = {
 };
 export type DayForecast = {
     time?: string | null;
-    temperatureHigh?: number;
-    temperatureLow?: number;
+    temperatureMax?: number;
+    temperatureMin?: number;
     precipProbability?: string | null;
     icon?: string | null
 };
@@ -252,6 +252,7 @@ export type IWeather = {
     tempHigh?: number;
     tempLow?: number;
     precip?: number;
+    feelsLike?: number;
     dailyForecast?: DayForecast[] | [];
     hourlyForecast?: HourForecast[] | [];
 };
