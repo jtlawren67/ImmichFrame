@@ -218,4 +218,8 @@ volumes:
 ```
 
 
+<<<<<<< HEAD
 [openweathermap-url]: https://openweathermap.org/appid
+=======
+[openweathermap-url]: https://openweathermap.org/appid
+>>>>>>> b71ad49 (Update calendar (#7))

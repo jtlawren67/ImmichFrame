@@ -10,12 +10,15 @@ const config: Config = {
   onBrokenLinks: 'throw',
   favicon: 'img/favicon.png',
 
+<<<<<<< HEAD
   markdown: {
     hooks: {
       onBrokenMarkdownLinks: 'warn',
     },
   },
 
+=======
+>>>>>>> b71ad49 (Update calendar (#7))
   url: 'https://immichframe.dev',
   baseUrl: '/',
   trailingSlash: false,

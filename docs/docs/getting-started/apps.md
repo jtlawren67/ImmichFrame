@@ -72,6 +72,7 @@ curl "http://192.168.0.136:53287/brightness?value=0.5"
 ```
 
 ### Frameo
+<<<<<<< HEAD
 ImmichFrame can be run on inexpensive Frameo digital photo frames with some additional effort. You can typically find these for ~$40 USD. 
 
 Frameo digital photo frames are low powered and run a very old Android version, so they cannot run the full WebView version of the app (however most of the main features are still supported except SplitView). 
@@ -168,6 +169,12 @@ adb shell am start -a android.settings.SETTINGS
 #### Re-enable Frameo
 
 1. Enable Frameo again with ADB command:
+=======
+ImmichFrame can be run on inexpensive Frameo digital photo frames with some additional effort. You can typically find these for ~$40 USD. These devices are low powered and run a very old Android version, so they cannot run the full WebView version of the app (however most of the main features are still supported except SplitView). We have found a method to update the WebView, but it is not without risks, see Frameo Webview Update below.  
+ If you have not already, you will need to install ADB on your PC ([ADB instructions][ADB-link]).
+ADB is often enabled on these devices by default, if it is not go to Frameo Settings-About-Enable Beta Program. Toggle ADB Access On-Off-On. Use the ADB commands below to sideload [ImmichFrame APK][github-android-releases], configure it to your liking, then disable the Frameo app to to set ImmichFrame as default Home app:
+  - Sideload ImmichFrame:
+>>>>>>> b71ad49 (Update calendar (#7))
     ```bash
     adb shell su
     pm enable net.frameo.frame
@@ -229,8 +236,11 @@ Depending on the device or Android version, the location to the webview apk may 
 ```shell
 adb shell pm path com.android.webview
 ```
+<<<<<<< HEAD
 :::
 
+=======
+>>>>>>> b71ad49 (Update calendar (#7))
 #### Alternative WebView Method
 If the above method does not work, or you receive permissions issue, try this [Alternative Method][alternate-webview-method]
 
@@ -266,7 +276,11 @@ The screen is configured in a 3x3 gird. You can touch or click:
 [play-store-link]: https://play.google.com/store/apps/details?id=com.immichframe.immichframe
 [github-android-repo]: https://github.com/immichFrame/ImmichFrame_Android
 [github-android-releases]: https://github.com/immichFrame/ImmichFrame_Android/releases
+<<<<<<< HEAD
 [github-apple-repo]: https://github.com/immichFrame/ImmichFrame_Apple
+=======
+[github-appletv-repo]: https://github.com/immichFrame/ImmichFrame_Apple
+>>>>>>> b71ad49 (Update calendar (#7))
 [app-store-link]: https://apps.apple.com/us/app/immichframe/id6742748077
 [releases-url]: https://github.com/immichFrame/ImmichFrame_Desktop/releases/latest
 [ADB-link]: https://www.xda-developers.com/install-adb-windows-macos-linux/
