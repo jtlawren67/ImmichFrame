@@ -4,6 +4,21 @@ sidebar_position: 2
 
 # 🔧 Configuration
 
+ImmichFrame looks for a configuration directory in the following places:
+
+1. It reads the `IMMICHFRAME_CONFIG_PATH` environment variable (if present).
+2. A `Config` directory relative to the ImmichFrame executable.
+3. A `Config` directory relative to the current working directory.
+
+Inside the configuration directory, ImmichFrame loads the first of these files:
+
+1. `Settings.json`
+2. `Settings.yml`
+3. `Settings.yaml`
+
+If none of these files are found, ImmichFrame loads its config from environment
+variables.
+
 ### Full configuration reference:
 
 :::warning
@@ -12,7 +27,7 @@ Only override settings you intend to change.
 Defaults might change between versions, so keeping your config minimal helps future upgrades.
 :::
 
-Defaults are below, only one account with `ImmichServerUrl` and `ApiKey` are required.
+Defaults are below, only one account with `ImmichServerUrl` and `ApiKey`|`ApiKeyFile` are required.
 
 ```yaml
 # settings applicable to the web client - when viewing with a browser or webview
@@ -89,7 +104,9 @@ Accounts:
   - # The URL of your Immich server e.g. `http://photos.yourdomain.com` / `http://192.168.0.100:2283`.
     ImmichServerUrl: 'REQUIRED'  # string, required, no default
     # Read more about how to obtain an Immich API key: https://immich.app/docs/features/command-line-interface#obtain-the-api-key
-    ApiKey: 'REQUIRED'  # string, required, no default
+    # Exactly one of ApiKey or ApiKeyFile must be set.
+    ApiKey: "super-secret-api-key"
+    # ApiKeyFile: "/path/to/api.key"
     # Show images after date. Overwrites the `ImagesFromDays`-Setting
     ImagesFromDate: null  # Date
     # If this is set, memories are displayed.
@@ -174,3 +191,6 @@ ImmichFrame can be customized even further using CSS. This will apply to browser
 volumes:  
       - /PATH/TO/YOUR/custom.css:/app/wwwroot/static/custom.css
 ```
+
+
+[openweathermap-url]: https://openweathermap.org/appid
