@@ -22,7 +22,7 @@ public class IcalCalendarService : ICalendarService
 
     public async Task<List<IAppointment>> GetAppointments()
     {
-        return await _appointmentCache.GetOrAddAsync("appointments", async () =>
+        var appointments = await _appointmentCache.GetOrAddAsync("appointments", async () =>
         {
             var appointments = new List<IAppointment>();
 
@@ -57,6 +57,14 @@ public class IcalCalendarService : ICalendarService
 
             return appointments;
         });
+
+        // Keep the downloaded calendar data cached, but evaluate whether an
+        // appointment is still current for every API request. Otherwise an
+        // event that ends during the cache window remains visible until cache
+        // expiration.
+        return appointments
+            .Where(appointment => appointment.EndTime > DateTime.Now)
+            .ToList();
     }
 
     public async Task<List<string>> GetCalendars(IEnumerable<(string? auth, string url)> calendars)
