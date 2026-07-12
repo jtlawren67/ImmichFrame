@@ -9,19 +9,25 @@ namespace ImmichFrame.WebApi.Helpers
     {
         public static IAppointment ToAppointment(this Occurrence occurrence)
         {
-            if (occurrence.Source.GetType() == typeof(CalendarEvent)) {
-                return ((CalendarEvent)occurrence.Source).ToAppointment();
-            }
-
-            return new Appointment
+            var appointment = new Appointment
             {
-                //Summary = occurrence.Period.Duration.Summary,
-                //Description = occurrence.Source.Description,
                 StartTime = occurrence.Period.StartTime.AsSystemLocal,
                 Duration = occurrence.Period.Duration,
                 EndTime = occurrence.Period.EndTime.AsSystemLocal,
                 Location = ""
             };
+
+            // A recurring event's source contains the series' original DTSTART.
+            // Use the occurrence period above for timing, then copy only metadata
+            // from the source event.
+            if (occurrence.Source is CalendarEvent calEvent)
+            {
+                appointment.Summary = calEvent.Summary;
+                appointment.Description = calEvent.Description;
+                appointment.Location = calEvent.Location;
+            }
+
+            return appointment;
         }
         public static IAppointment ToAppointment(this CalendarEvent calEvent)
         {
