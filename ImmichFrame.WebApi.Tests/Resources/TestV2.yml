@@ -5,6 +5,7 @@ General:
   RenewImagesDuration: 7
   Webcalendars:
   - Webcalendars_TEST
+  WebcalendarLookaheadDays: 7
   RefreshAlbumPeopleInterval: 7
   PhotoDateFormat: PhotoDateFormat_TEST
   ImageLocationFormat: ImageLocationFormat_TEST
@@ -72,8 +73,5 @@ Accounts:
   - 00000000-0000-0000-0000-000000000001
   People:
   - 00000000-0000-0000-0000-000000000001
-<<<<<<< HEAD
   Tags:
   - Account2.Tags_TEST
-=======
->>>>>>> b71ad49 (Update calendar (#7))
