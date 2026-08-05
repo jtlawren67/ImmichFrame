@@ -29,7 +29,7 @@
         public void ValidateAndInitialize();
     }
 
-    public interface IGeneralSettings
+    public interface IGeneralSettings : IClientSettings, IServerBehaviorSettings
     {
         public List<string> Webcalendars { get; }
 		public int WebcalendarLookaheadDays {get; }
@@ -67,7 +67,6 @@
         public bool PlayAudio { get; }
         public string Layout { get; }
         public string Language { get; }
-
         public void Validate();
     }
 }
