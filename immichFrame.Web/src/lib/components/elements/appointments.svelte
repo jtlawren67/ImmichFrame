@@ -5,24 +5,40 @@
 	import { configStore } from '$lib/stores/config.store';
 	import { clientIdentifierStore } from '$lib/stores/persist.store';
 	import Icon from './icon.svelte';
-	import { mdiMapMarker} from '@mdi/js';
+	import { mdiMapMarker } from '@mdi/js';
 
 	api.init();
 
-	function formatDates(startTime: string, endTime: string) {
-		let startDate = new Date(startTime);
-		let endDate = new Date(endTime);
-		let sameDay = startDate.getDate() == endDate.getDate();
+	function isAllDayEvent(startTime: string, endTime: string) {
+		const startDate = new Date(startTime);
+		const endDate = new Date(endTime);
 
-		let clockFormat = $configStore.clockFormat ?? 'HH:mm';
-		let clockDateFormat = $configStore.clockDateFormat ?? 'eee, MMM d';
-		let fullFormat = clockDateFormat + ' ' + clockFormat;
+		return (
+			endDate > startDate &&
+			startDate.getHours() === 0 &&
+			startDate.getMinutes() === 0 &&
+			startDate.getSeconds() === 0 &&
+			startDate.getMilliseconds() === 0 &&
+			endDate.getHours() === 0 &&
+			endDate.getMinutes() === 0 &&
+			endDate.getSeconds() === 0 &&
+			endDate.getMilliseconds() === 0
+		);
+	}
 
-		if (sameDay) {
-			return format(startDate, clockFormat) + ' - ' + format(endDate, clockFormat);
-		}
+	function inclusiveEndDate(endTime: string) {
+		// iCalendar represents all-day event end dates exclusively (at the next midnight).
+		return new Date(new Date(endTime).getTime() - 1);
+	}
 
-		return format(startDate, fullFormat) + ' - ' + format(endDate, fullFormat);
+	function formatAllDayDates(startTime: string, endTime: string) {
+		const startDate = new Date(startTime);
+		const endDate = inclusiveEndDate(endTime);
+		const startLabel = format(startDate, 'EEEE MMM dd');
+
+		return format(startDate, 'yyyy-MM-dd') === format(endDate, 'yyyy-MM-dd')
+			? startLabel
+			: `${startLabel} to ${format(endDate, 'EEEE MMM dd')}`;
 	}
 
 	let appointments: api.IAppointment[] = $state() as api.IAppointment[];
@@ -62,19 +78,34 @@
 		<div class="">
 			{#each appointments as appointment}
 				<div class="bg-opacity-90 mb-2 text-left rounded-md p-3">
-					{#if format(new Date(appointment.startTime ?? ''), 'MMMM dd yyyy') === format(new Date(appointment.endTime ?? ''), 'MMMM dd yyyy')}
-					<p class="text-s">
-						<b><u>{format(new Date(appointment.startTime ?? ''), 'EEEE MMM dd')}</u></b>
-					</p>
-					<p class="text-xs">
-						{format(appointment.startTime ?? '', 'hh:mm b')} - {format(appointment.endTime ?? '', 'hh:mm b')}
-					</p>
+					{#if isAllDayEvent(appointment.startTime ?? '', appointment.endTime ?? '')}
+						<p class="text-s">
+							<b><u>{formatAllDayDates(appointment.startTime ?? '', appointment.endTime ?? '')}</u></b>
+						</p>
+						<p class="text-xs">All day</p>
+					{:else if format(new Date(appointment.startTime ?? ''), 'MMMM dd yyyy') === format(new Date(appointment.endTime ?? ''), 'MMMM dd yyyy')}
+						<p class="text-s">
+							<b><u>{format(new Date(appointment.startTime ?? ''), 'EEEE MMM dd')}</u></b>
+						</p>
+						<p class="text-xs">
+							{format(appointment.startTime ?? '', 'hh:mm b')} - {format(
+								appointment.endTime ?? '',
+								'hh:mm b'
+							)}
+						</p>
 					{:else}
-					<p class="text-s">
-						<b><u>{format(new Date(appointment.startTime ?? ''), 'EEE MMM dd')} to {format(new Date(appointment.endTime ?? ''), 'EEE MMM dd')}</u></b>
-					</p>
+						<p class="text-s">
+							<b
+								><u
+									>{format(new Date(appointment.startTime ?? ''), 'EEEE MMM dd')} to {format(
+										new Date(appointment.endTime ?? ''),
+										'EEEE MMM dd'
+									)}</u
+								></b
+							>
+						</p>
 					{/if}
-					
+
 					{appointment.summary}
 					{#if appointment.location}
 						<p class="text-xs font-light">
