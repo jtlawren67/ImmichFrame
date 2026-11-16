@@ -7,7 +7,7 @@ using ImmichFrame.Core.Models;
 
 namespace ImmichFrame.Core.Logic;
 
-public class PooledImmichFrameLogic : IAccountImmichFrameLogic
+public class PooledImmichFrameLogic : IAccountImmichFrameLogic, IDisposable
 {
     private readonly IGeneralSettings _generalSettings;
     private readonly IApiCache _apiCache;
@@ -19,7 +19,7 @@ public class PooledImmichFrameLogic : IAccountImmichFrameLogic
     {
         _generalSettings = generalSettings;
 
-        var httpClient = httpClientFactory.CreateClient("ImmichApiAccountClient");
+        var httpClient = httpClientFactory.CreateClient(ImmichApiHttpClientExtensions.ImmichApiAccountClient);
         AccountSettings = accountSettings;
 
         httpClient.UseApiKey(accountSettings.ApiKey);
@@ -36,33 +36,29 @@ public class PooledImmichFrameLogic : IAccountImmichFrameLogic
 
     private IAssetPool BuildPool(IAccountSettings accountSettings)
     {
-        var hasAlbums = accountSettings.Albums?.Any() ?? false;
-        var hasPeople = accountSettings.People?.Any() ?? false;
-        var hasTags = accountSettings.Tags?.Any() ?? false;
+        var hasSource = accountSettings.ShowFavorites
+            || (accountSettings.Albums?.Any() ?? false)
+            || (accountSettings.People?.Any() ?? false)
+            || (accountSettings.Tags?.Any() ?? false);
 
-        if (!accountSettings.ShowFavorites && !accountSettings.ShowMemories && !hasAlbums && !hasPeople && !hasTags)
-        {
-            return new AllAssetsPool(_apiCache, _immichApi, accountSettings);
-        }
+        // With every memory type switched off, treat memories as off rather than as an empty source.
+        var showMemories = accountSettings.ShowMemories
+            && (accountSettings.ShowOnThisDayMemories || accountSettings.ShowBirthdayMemories);
 
         var pools = new List<IAssetPool>();
 
-        if (accountSettings.ShowFavorites)
-            pools.Add(new FavoriteAssetsPool(_apiCache, _immichApi, accountSettings));
+        // Memories-only skips the library search. Every other case needs it.
+        if (!showMemories || hasSource)
+        {
+            pools.Add(new AccountSearchPool(_apiCache, _immichApi, accountSettings));
+        }
 
-        if (accountSettings.ShowMemories)
+        if (showMemories)
+        {
             pools.Add(new MemoryAssetsPool(_immichApi, accountSettings));
+        }
 
-        if (hasAlbums)
-            pools.Add(new AlbumAssetsPool(_apiCache, _immichApi, accountSettings));
-
-        if (hasPeople)
-            pools.Add(new PersonAssetsPool(_apiCache, _immichApi, accountSettings));
-
-        if (hasTags)
-            pools.Add(new TagAssetsPool(_apiCache, _immichApi, accountSettings));
-
-        return new MultiAssetPool(pools);
+        return pools.Count == 1 ? pools[0] : new MultiAssetPool(pools);
     }
 
     public async Task<AssetResponseDto?> GetNextAsset()
@@ -142,7 +138,9 @@ public class PooledImmichFrameLogic : IAccountImmichFrameLogic
             }
         }
 
-        var data = await _immichApi.ViewAssetAsync(null, id, string.Empty, AssetMediaSize.Preview, null);
+        // edited: true returns the version with Immich's crop or rotation applied (#680). Immich
+        // falls back to the original when an asset has no edits.
+        var data = await _immichApi.ViewAssetAsync(true, id, string.Empty, AssetMediaSize.Preview, null);
 
         if (data == null)
             throw new AssetNotFoundException($"Asset {id} was not found!");
@@ -204,4 +202,6 @@ public class PooledImmichFrameLogic : IAccountImmichFrameLogic
         await WebhookHelper.SendWebhookNotification(notification, _generalSettings.Webhook);
 
     public override string ToString() => $"Account Pool [{_immichApi.BaseUrl}]";
+
+    public void Dispose() => (_apiCache as IDisposable)?.Dispose();
 }

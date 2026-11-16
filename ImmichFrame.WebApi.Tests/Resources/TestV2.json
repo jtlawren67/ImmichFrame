@@ -1,6 +1,7 @@
 {
   "General": {
     "AuthenticationSecret": "AuthenticationSecret_TEST",
+    "AdminPassword": "AdminPassword_TEST",
     "DownloadImages": true,
     "RenewImagesDuration": 7,
     "Webcalendars": [
@@ -45,6 +46,8 @@
       "ApiKeyFile": "Account1.ApiKeyFile_TEST",
       "ImagesFromDate": "2020-01-02",
       "ShowMemories": true,
+      "ShowOnThisDayMemories": true,
+      "ShowBirthdayMemories": true,
       "ShowFavorites": true,
       "ShowArchived": true,
       "ShowVideos": true,
@@ -70,6 +73,8 @@
       "ApiKeyFile": "Account2.ApiKeyFile_TEST",
       "ImagesFromDate": "2020-01-02",
       "ShowMemories": true,
+      "ShowOnThisDayMemories": true,
+      "ShowBirthdayMemories": true,
       "ShowFavorites": true,
       "ShowArchived": true,
       "ShowVideos": true,

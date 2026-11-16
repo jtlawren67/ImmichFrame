@@ -73,6 +73,7 @@ namespace ImmichFrame.WebApi.Tests.Controllers
                             AccountsImpl = new List<ServerAccountSettings> { accountSettings }
                         };
 
+                        services.AddSingleton<ISettingsProvider>(new StaticSettingsProvider(serverSettings));
                         services.AddSingleton<IServerSettings>(serverSettings);
                         services.AddSingleton<IGeneralSettings>(generalSettings);
                         // Ensure IAccountSettings can be resolved if needed by MultiImmichFrameLogicDelegate directly
@@ -95,33 +96,33 @@ namespace ImmichFrame.WebApi.Tests.Controllers
             // Arrange
             var expectedAssetId = Guid.NewGuid();
 
-            // Build the mock response from the generated DTOs so the test fails at
-            // compile time (not at runtime) if the OpenAPI schema changes.
-            var searchResponse = new SearchResponseDto
-            {
-                Assets = new SearchAssetResponseDto
-                {
-                    Count = 1,
-                    Total = 1,
-                    Items = { BuildAssetResponse(expectedAssetId) },
-                    NextPage = null,
-                },
-                // Albums is already initialised to an empty SearchAlbumResponseDto.
-            };
-
-            var jsonResponse = JsonSerializer.Serialize(searchResponse);
-
-            // Setup for SearchAssetsAsync
+            // Account selection asks for the match count before the random pick.
+            var statsJson = JsonSerializer.Serialize(new SearchStatisticsResponseDto { Total = 1 });
             _mockHttpMessageHandler.Protected()
                 .Setup<Task<HttpResponseMessage>>(
                     "SendAsync",
-                    ItExpr.Is<HttpRequestMessage>(req => req.RequestUri!.ToString().Contains("/search/metadata")),
+                    ItExpr.Is<HttpRequestMessage>(req => req.RequestUri!.ToString().Contains("/search/statistics")),
                     ItExpr.IsAny<CancellationToken>()
                 )
-                .ReturnsAsync(() => new HttpResponseMessage // Use a Func to return new instance each time
+                .ReturnsAsync(() => new HttpResponseMessage
                 {
                     StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent(jsonResponse)
+                    Content = new StringContent(statsJson)
+                });
+
+            // Build the mock response from the generated DTOs so the test fails at
+            // compile time (not at runtime) if the OpenAPI schema changes.
+            var randomJson = JsonSerializer.Serialize(new[] { BuildAssetResponse(expectedAssetId) });
+            _mockHttpMessageHandler.Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.Is<HttpRequestMessage>(req => req.RequestUri!.ToString().Contains("/search/random")),
+                    ItExpr.IsAny<CancellationToken>()
+                )
+                .ReturnsAsync(() => new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(randomJson)
                 });
 
             // Setup for ViewAssetAsync (thumbnail)
@@ -149,6 +150,16 @@ namespace ImmichFrame.WebApi.Tests.Controllers
             // For now, we'll just check if the response is not empty.
             // A more robust check would be to deserialize the response and check the asset ID.
             Assert.That(content, Is.Not.Empty);
+
+            // The preview is requested with Immich's edits (crop, rotation) applied (#680).
+            _mockHttpMessageHandler.Protected().Verify(
+                "SendAsync",
+                Times.AtLeastOnce(),
+                ItExpr.Is<HttpRequestMessage>(req =>
+                    req.RequestUri!.AbsolutePath.EndsWith("/thumbnail") &&
+                    req.RequestUri.Query.Contains("edited=true") &&
+                    req.RequestUri.Query.Contains("size=preview")),
+                ItExpr.IsAny<CancellationToken>());
         }
 
         // Builds a valid AssetResponseDto from the generated client types. Only the
