@@ -252,12 +252,4 @@ volumes:
       - /PATH/TO/YOUR/custom.css:/app/wwwroot/static/custom.css
 ```
 
-<<<<<<< HEAD
-
-<<<<<<< HEAD
-=======
->>>>>>> upstream/main
 [openweathermap-url]: https://openweathermap.org/appid
-=======
-[openweathermap-url]: https://openweathermap.org/appid
->>>>>>> b71ad49 (Update calendar (#7))

@@ -73,7 +73,7 @@
 {#if showPhotoDate || showLocation || showImageDesc || showPeopleDesc || showTagsDesc || showAlbumName}
 	<div
 		id="imageinfo"
-		class="immichframe_image_metadata absolute bottom-0 right-0 z-100 text-frame-primary p-1 text-right
+		class="immichframe_image_metadata absolute bottom-0 right-4 z-100 text-frame-primary p-1 text-right
 		{$configStore.style == 'solid' ? 'bg-frame-secondary rounded-tl-2xl' : ''}
 		{$configStore.style == 'transition' ? 'bg-linear-to-l from-frame-secondary from-0% pl-10' : ''}
 		{$configStore.style == 'blur' ? 'backdrop-blur-lg rounded-tl-2xl' : ''}	"
