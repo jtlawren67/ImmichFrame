@@ -12,7 +12,7 @@ public class ServerSettings : IServerSettings
 
     [YamlMember(Alias = "Accounts")]
     [JsonPropertyName("Accounts")]
-    public IEnumerable<ServerAccountSettings> AccountsImpl { get; set; }
+    public IEnumerable<ServerAccountSettings> AccountsImpl { get; set; } = new List<ServerAccountSettings>();
 
     //Covariance not allowed on interface impls
     [JsonIgnore]

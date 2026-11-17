@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using System.Reflection;
 using ImmichFrame.Core.Logic;
 using ImmichFrame.Core.Logic.AccountSelection;
+using ImmichFrame.Core.Services;
 using ImmichFrame.WebApi.Database;
 using ImmichFrame.WebApi.Helpers;
 using ImmichFrame.WebApi.Helpers.Config;
