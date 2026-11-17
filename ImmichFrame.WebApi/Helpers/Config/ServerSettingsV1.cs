@@ -5,11 +5,13 @@ namespace ImmichFrame.WebApi.Helpers;
 /// <summary>
 /// Original 'flat' Settings definition, which contains settings related to all components
 /// </summary>
-public class ServerSettingsV1 : IConfigSettable
+public class ServerSettingsV1
 {
     public string ImmichServerUrl { get; set; } = string.Empty;
     public string ApiKey { get; set; } = string.Empty;
     public bool ShowMemories { get; set; } = false;
+    public bool ShowOnThisDayMemories { get; set; } = true;
+    public bool ShowBirthdayMemories { get; set; } = true;
     public bool ShowFavorites { get; set; } = false;
     public bool ShowArchived { get; set; } = false;
     public bool ShowVideos { get; set; } = false;
@@ -32,6 +34,7 @@ public class ServerSettingsV1 : IConfigSettable
     public string Language { get; set; } = "en";
     public string? Webhook { get; set; }
     public string? AuthenticationSecret { get; set; }
+    public string? AdminPassword { get; set; }
     public int Interval { get; set; } = 45;
     public double TransitionDuration { get; set; } = 1;
     public bool ShowClock { get; set; } = true;
@@ -83,6 +86,8 @@ public class ServerSettingsV1Adapter(ServerSettingsV1 _delegate) : IServerSettin
         public string ApiKey => _delegate.ApiKey;
         public string? ApiKeyFile => null;  // V1 settings didn't support paths to api keys.
         public bool ShowMemories => _delegate.ShowMemories;
+        public bool ShowOnThisDayMemories => _delegate.ShowOnThisDayMemories;
+        public bool ShowBirthdayMemories => _delegate.ShowBirthdayMemories;
         public bool ShowFavorites => _delegate.ShowFavorites;
         public bool ShowArchived => _delegate.ShowArchived;
         public bool ShowVideos => _delegate.ShowVideos;
@@ -109,6 +114,7 @@ public class ServerSettingsV1Adapter(ServerSettingsV1 _delegate) : IServerSettin
         public string? UnitSystem => _delegate.UnitSystem;
         public string? Webhook => _delegate.Webhook;
         public string? AuthenticationSecret => _delegate.AuthenticationSecret;
+        public string? AdminPassword => _delegate.AdminPassword;
         public int Interval => _delegate.Interval;
         public double TransitionDuration => _delegate.TransitionDuration;
         public bool DownloadImages => _delegate.DownloadImages;
